@@ -21,10 +21,18 @@ Discharge Instructions: {{dischargeinstructions}}<br>
 
 Meds:
 
-<table>
-{{#each meds}}
-<tr><td>{{this}}
-{{/each}}
-</table>
+<form action="/cgi-bin/coupons.pl" method="post">
+		<table>
+		{{#each meds}}
+		<tr>
+			<td>
+				<label><input type="checkbox" name="{{this}}">{{this}}</label>
+			<td>
+		{{/each}}
+		</table>
+		<input type="hidden" name="patientid" value="{{patientid}}">
+		<input type="submit">
+</form>
+
 </BODY>
 </HTML>
