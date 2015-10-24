@@ -3,6 +3,8 @@
 $| = 1;
 
 use CGI;
+use PBM::Drugs;
+
 print CGI::header();
 
 my $query = CGI->new;
@@ -23,7 +25,7 @@ my $patientdata = {
 	hpi => 'hpi here',
 	allergies => 'allergies here',
 	dischargeinstructions => 'discharge instructions here',
-	meds => ['med1', 'med2', 'med3'],
+	meds => PBM::Drugs::get_drug_names(),
 };
 
 print Text::Handlebars->new->render_string($hbstemplate, $patientdata);
