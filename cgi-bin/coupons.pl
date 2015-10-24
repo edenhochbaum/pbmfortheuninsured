@@ -30,16 +30,16 @@ my $pharmacies = PBM::Drugs::get_pharmacies();
 
 print Text::Handlebars->new->render_string($hbstemplate, {
 	pharmacies => $pharmacies,
-	#drugs => $couponsdata,
 	drugs => [
 		map {
+			my $drugname = $_;
 			+{
-				name => $_,
+				name => $drugname,
 				pharmacy => {
-					value => [ 1 .. scalar(@$pharmacies) ],
+					value => [ map { (values $couponsdata->{$drugname})[$_-1] } (1 .. scalar(@$pharmacies)) ],
 				},
 			};
 		} @onmeds
 	],
-	totals => [1 .. scalar(@$pharmacies)],
+	totals => [('x') x scalar(@$pharmacies)],
 });
