@@ -6,6 +6,8 @@ use strict;
 use warnings;
 
 use CGI;
+use Text::Handlebars;
+use File::Slurp;
 use PBM::Drugs;
 
 print CGI::header();
@@ -14,19 +16,30 @@ my $query = CGI->new;
 
 my $params = $query->Vars;
 
-print sprintf('patient id is [%s]', $params->{patientid});
-
-print '<br><br>';
-
 my @onmeds = grep { $_ =~ /^med_/ && $params->{$_} eq 'on'} keys %$params;
-print sprintf('on meds are: [%s]', join(', ', map { $_ =~ /^med_(.*)$/ } @onmeds));
-
-print '<br><br>';
-
-my $drugs = PBM::Drugs::get_all_data();
+@onmeds = map { $_ =~ /^med_(.*)$/ } @onmeds;
 
 use Data::Dumper;
 
-print Dumper($drugs);
+my $coupons_file = sprintf('%s/hbs/coupons.hbs', $ENV{DOCUMENT_ROOT});
 
-print 'foobar';
+my $hbstemplate = File::Slurp::read_file($coupons_file);
+
+my $couponsdata = PBM::Drugs::get_pharmacies_for_drugs(\@onmeds);
+my $pharmacies = PBM::Drugs::get_pharmacies();
+
+print Text::Handlebars->new->render_string($hbstemplate, {
+	pharmacies => $pharmacies,
+	#drugs => $couponsdata,
+	drugs => [
+		map {
+			+{
+				name => $_,
+				pharmacy => {
+					value => [ 1 .. scalar(@$pharmacies) ],
+				},
+			};
+		} @onmeds
+	],
+	totals => [1 .. scalar(@$pharmacies)],
+});

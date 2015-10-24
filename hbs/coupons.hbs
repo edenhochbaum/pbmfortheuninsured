@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<HTML>
+   <HEAD>
+      <TITLE>
+         PBM For the Uninsured!
+      </TITLE>
+	  <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
+
+   </HEAD>
+<BODY>
+</BODY>
+
+<table id="drugs" class="display" cellspacing="0">
+		<thead>
+			<tr>
+				<th>Drug</th>
+				{{#each pharmacies}}
+				<th>{{this}}</th>
+				{{/each}}
+			</tr>
+		</thead>
+		<tbody>
+			{{#each drugs}}
+			<tr>
+				<td>{{name}}
+				{{#each pharmacy.value}}
+				<td>{{this}}
+				{{/each}}
+			</tr>
+			{{/each}}
+			<tr>
+				<td>total
+				{{#each totals}}
+				<td>{{this}}
+				{{/each}}
+		</tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+
+<script>
+		$(document).ready(function() {
+			$('#drugs').DataTable();
+		});
+</script>
+</HTML>

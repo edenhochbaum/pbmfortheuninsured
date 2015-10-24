@@ -30,8 +30,60 @@ sub get_all_data {
 }
 
 sub get_drug_names {
-	my $elements = get_drugs();
+	my $elements = get_all_data();
 	return [ map { $_->{Drug} } @$elements ];
+}
+
+sub get_pharmacies {
+	my $elements = get_all_data();
+	return [grep { $_ !~ /^Drug$/ and $_ !~ /^Id$/ } keys($elements->[0])]
+}
+
+sub drug_to_id_map {
+	my $elements = get_all_data();
+	return +{
+		map {
+			($_->{Drug} => $_->{Id});
+		} @$elements
+	};
+}
+
+sub id_to_drug_map {
+	my $elements = get_all_data();
+	return +{
+		map {
+			($_->{Id} => $_->{Drug})
+		} @$elements
+	};
+}
+
+# removes the ids
+sub drug_map_to_elements {
+	my $elements = get_all_data();
+	return +{
+		map {
+			delete($_->{Id});
+			(delete($_->{Drug}) => $_)
+		} @$elements
+	};
+}
+
+# takes listref of drugs
+# returns a hashref of { drug => [pharmacy => price] }
+sub get_pharmacies_for_drugs {
+	my ($drugs) = @_;
+
+	my @pharmacies = @{get_pharmacies()};
+
+	my $drug_map_to_elements = drug_map_to_elements();
+
+	my $rv = {};
+
+	foreach my $drug (@$drugs) {
+		$rv->{$drug} = $drug_map_to_elements->{$drug};
+	}
+
+	return $rv;
 }
 
 1;
