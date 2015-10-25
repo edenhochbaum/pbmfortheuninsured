@@ -38,8 +38,8 @@
 		</tbody>
 </table>
 
-<button type="button" class="btn btn-primary" aria-label="Left Align">Print Coupons</button><br><br>
-<button type="button" class="btn btn-success" aria-label="Left Align">Print Map</button><br>
+<button id="printcoupons" type="button" class="btn btn-primary" aria-label="Left Align">Print Coupons</button><br><br>
+<button id="printmap" type="button" class="btn btn-success" aria-label="Left Align">Print Map</button><br>
 
 <div bestpharmacy="{{bestpharmacy}}"></div>
 
@@ -56,6 +56,13 @@
 		var bestcolumnindexes = [];
 
 		$(document).ready(function() {
+			$('button#printcoupons').click(function() {
+				alert('print coupons here');
+			});
+			$('button#printmap').click(function() {
+				alert('print map here');
+			});
+
 			var bestpharmacy = $('div[bestpharmacy]').first().attr('bestpharmacy');
 
 			$('#drugs').find("th[name$='Rtl'][name!='"+bestpharmacy+"']").each(function(index, element) {
