@@ -42,6 +42,7 @@
 <button id="printmap" type="button" class="btn btn-success" aria-label="Left Align">Print Map</button><br>
 
 <div bestpharmacy="{{bestpharmacy}}"></div>
+<div id="map"></div>
 
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
@@ -83,15 +84,17 @@
 				}
 
 				for (i=0; i<intersection.length; i++) {
-					window.open('../pdf/'+intersection[i]+'.pdf');
+					//window.open('../pdf/'+intersection[i]+'.pdf');
 				}
+				window.open('http://arxiv.org/pdf/cs/0012023v5.pdf');
 
 				
 			});
 
 			$('button#printmap').click(function() {
-				var patientaddress="{{address}}";
-				alert('print map for patientaddress: '+patientaddress);
+				window.open('http://pbmfortheuninsured.org/cgi-bin/map.pl?address="{{address}}"');
+				//var patientaddress="{{address}}";
+				//alert('print map for patientaddress: '+patientaddress);
 			});
 
 			var bestpharmacy = $('div[bestpharmacy]').first().attr('bestpharmacy');

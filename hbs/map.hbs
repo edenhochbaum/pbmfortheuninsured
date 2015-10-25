@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Info windows</title>
+    <style>
+
+html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100%;
+}
+
+#right-panel {
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+#right-panel select, #right-panel input {
+  font-size: 15px;
+}
+
+#right-panel select {
+  width: 100%;
+}
+
+#right-panel i {
+  font-size: 12px;
+}
+
+#right-panel {
+  height: 40%;
+  float: right;
+  width: 390px;
+  overflow: auto;
+}
+
+#map {
+  margin-right: 400px;
+}
+
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+@media print {
+  #map {
+    height: 500px;
+    margin: 0;
+  }
+
+  #right-panel {
+    float: none;
+    width: auto;
+  }
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="floating-panel">
+    <b>Mode of Travel: </b>
+    <select id="mode">
+      <option value="DRIVING">Driving</option>
+      <option value="WALKING">Walking</option>
+      <option value="BICYCLING">Bicycling</option>
+      <option value="TRANSIT">Transit</option>
+    </select>
+    </div>
+    <div id="right-panel"></div>
+    <div id="map"></div>
+	<div id="address">{{address}}</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+
+    var map;
+    var infowindow;
+    var directionsService;
+    var directionsDisplay;
+    var practiceAddress;
+    var patientAddress = $('div#address').text();
+
+    function initMap() {
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      directionsService = new google.maps.DirectionsService();
+
+      var mapOptions = {
+        zoom : 12,
+        center : {lat: 35.142566, lng: -90.031943}
+      };
+
+      map = new google.maps.Map(document.getElementById('map'),
+           mapOptions);
+
+      directionsDisplay.setMap(map);
+      directionsDisplay.setPanel(document.getElementById("right-panel"));
+
+      infowindow = new google.maps.InfoWindow();
+
+      practiceAddress = "877 Jefferson Ave, Memphis, TN";
+      codeAddress(practiceAddress,"Regional Medical Center Memphis",true);
+      codeAddress(patientAddress,"Patient Address",true);
+      getPharmacies();
+    }
+
+    function getPharmacies() {
+      data = [{"address":"7363 Goodman Road, Memphis, TN","label":"CVS"},
+              {"address":"1675 Germantown Parkway, Memphis, TN","label":"Kroger"},
+              {"address":"475 N Germantown Parkway, Memphis, TN","label":"Target"},
+              {"address":"3201 Austin Peay, Memphis, TN","label":"KMart"},
+              {"address":"9085 Highway 64, Memphis, TN","label":"RiteAid"},
+              {"address":"2670 Frayser Blvd, Memphis, TN","label":"Walgreens"}]
+      for (pharmacy in data) {
+        codeAddress(data[pharmacy].address, data[pharmacy].label,false);
+      }
+    }
+
+    function codeAddress(address,label,practice) {
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode( {'address': address}, function(results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+          var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+            label: practice ? 1 : label
+          });
+
+          marker.addListener('click', function() {
+            infowindow.setContent(label);
+            infowindow.open(map, marker);
+            map.setCenter(marker.getPosition());
+            if (!practice) {
+              calculateAndDisplayRoute(practiceAddress,marker.getPosition());
+            }
+          });
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+      });
+    }
+
+    function calculateAndDisplayRoute(start, finish) {
+      var selectedMode = document.getElementById('mode').value;
+      directionsService.route({
+        origin: start,
+        destination: finish,
+        travelMode: google.maps.TravelMode[selectedMode]
+      }, function(response, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+    }
+
+    </script>
+   <script async defer
+       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA-T0EWoeZ9uUHyOFtJ6gWDKi2rOGTLNM&signed_in=true&callback=initMap"></script>
+ </body>
+</html>
