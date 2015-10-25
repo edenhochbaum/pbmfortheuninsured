@@ -23,7 +23,7 @@
 		<tbody>
 			{{#each drugs}}
 			<tr>
-				<td>{{name}}
+				<td name="drugname">{{name}}
 				{{#each pharmacy.value}}
 				<td>{{this}}
 				{{/each}}
@@ -57,10 +57,41 @@
 
 		$(document).ready(function() {
 			$('button#printcoupons').click(function() {
-				alert('print coupons here');
+				var druguniverse = [
+					'Tamsulosin',
+					'Atorvastatin',
+					'Metformin',
+					'Irbesartan',
+					'Celecoxib'
+				];
+
+				var possibledrugs = [];
+				$('table#drugs').find("td[name='drugname']").each(function() {
+					var possibledrug = $(this).html();
+					possibledrug = possibledrug.trim();
+					possibledrugs = possibledrugs.concat([possibledrug]);
+				});
+
+				var intersection = [];
+
+				for (k=0; k<druguniverse.length; k++) {
+					for(j=0; j<possibledrugs.length; j++) {
+						if(druguniverse[k] === possibledrugs[j]) {
+							intersection = intersection.concat([druguniverse[k]]);
+						}
+					}
+				}
+
+				for (i=0; i<intersection.length; i++) {
+					window.open('../pdf/'+intersection[i]+'.pdf');
+				}
+
+				
 			});
+
 			$('button#printmap').click(function() {
-				alert('print map here');
+				var patientaddress="{{address}}";
+				alert('print map for patientaddress: '+patientaddress);
 			});
 
 			var bestpharmacy = $('div[bestpharmacy]').first().attr('bestpharmacy');
