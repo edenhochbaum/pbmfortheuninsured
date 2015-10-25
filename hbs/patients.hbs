@@ -15,6 +15,7 @@
 <table id="patients" class="display" cellspacing="0" width="100%">
 		<thead>
 			<tr>
+				<th>Avatar</th>
 				<th>Patient ID</th>
 				<th>Patient Name</th>
 				<th>Link</th>
@@ -22,7 +23,10 @@
 		</thead>
 
 		{{#each patients}}
-		<tr>
+		<tr sex="{{sex}}">
+			<td>
+				<img id="femaleavatar" height=30 width=30 alt="User Pic" src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png" class="img-circle img-responsive"></img>
+				<img id="maleavatar" height="30" width="30" alt="User Pic" src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png" class="img-circle img-responsive"></img></td>
 			<td>{{id}}</td>
 			<td>{{name}}</td>
 			<td><a href="/cgi-bin/patient.pl?id={{id}}&sex={{sex}}">chart</td>
@@ -35,7 +39,17 @@
 
 <script>
 		$(document).ready(function() {
-			$('#patients').DataTable();
+				$('table#patients').find('tr[sex]').each(function() {
+					sex = $(this).attr('sex');
+					if (sex === 'm') {
+							$(this).find('img#femaleavatar').hide();
+					}
+					if (sex === 'f') {
+							$(this).find('img#maleavatar').hide();
+					}
+				});
+
+				$('#patients').DataTable();
 		});
 </script>
 </HTML>

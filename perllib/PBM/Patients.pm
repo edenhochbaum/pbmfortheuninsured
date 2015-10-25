@@ -33,17 +33,16 @@ sub patients {
 		},
 		{
 			id => 4,
-			name => 'Sara Doe',
-			allergies => 'peanuts',
-			sex => 'f',
-		},
-		{
-			id => 5,
 			name => 'John Doe',
 			allergies => 'none',
 			sex => 'm',
 		},
-
+		{
+			id => 5,
+			name => 'Sara Doe',
+			allergies => 'peanuts',
+			sex => 'f',
+		},
 	],
 }
 
