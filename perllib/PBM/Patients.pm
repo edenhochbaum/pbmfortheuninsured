@@ -6,7 +6,9 @@ use warnings;
 sub name {
 	my ($id) = @_;
 
-	return 'john.'.$id;
+	my $patient = get_patient_from_id($id);
+
+	return $patient->{name};
 }
 
 sub patients {
@@ -43,6 +45,13 @@ sub patients {
 		},
 
 	],
+}
+
+sub get_patient_from_id {
+	my ($id) = @_;
+
+	return patients()->[$id-1];
+
 }
 
 1;
