@@ -26,6 +26,7 @@ my $patientdata = {
 	patientname => $patient->{name},
 	patientid => $id,
 	allergies => $patient->{allergies},
+	address => $patient->{address},
 	meds => PBM::Drugs::get_drug_names(),
 	sex => $sex,
 };

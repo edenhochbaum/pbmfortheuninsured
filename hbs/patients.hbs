@@ -18,6 +18,7 @@
 				<th>Avatar</th>
 				<th>Patient ID</th>
 				<th>Patient Name</th>
+				<th>Patient Address</th>
 				<th>Link</th>
 			</tr>
 		</thead>
@@ -29,6 +30,7 @@
 				<img id="maleavatar" height="30" width="30" alt="User Pic" src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png" class="img-circle img-responsive"></img></td>
 			<td>{{id}}</td>
 			<td>{{name}}</td>
+			<td>{{address}}</td>
 			<td><a href="/cgi-bin/patient.pl?id={{id}}&sex={{sex}}">chart</td>
 		</tr>
 		{{/each}}
