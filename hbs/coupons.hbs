@@ -15,7 +15,7 @@
 			<tr>
 				<th>Drug</th>
 				{{#each pharmacies}}
-				<th>{{this}}</th>
+				<th name="{{this}}">{{this}}</th>
 				{{/each}}
 			</tr>
 		</thead>
@@ -41,8 +41,48 @@
 <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 
 <script>
+		var rtlcolor = 'palegreen';
+		var cpncolor = 'yellow';
+
+		var rtlcolumnindexes = [];
+		var cpncolumnindexes = [];
+
 		$(document).ready(function() {
+			$('#drugs').find("th[name$='Rtl']").each(function(index, element) {
+				$(this).css('background-color', rtlcolor);
+				var colno = $(this).index();
+				rtlcolumnindexes = rtlcolumnindexes.concat([$(this).index()]);
+			});
+			$('#drugs').find("th[name$='Cpn']").each(function(index, element) {
+				$(this).css('background-color', cpncolor);
+				var colno = $(this).index();
+				cpncolumnindexes = cpncolumnindexes.concat([$(this).index()]);
+			});
+
+			var columnscompleted = [];
+			$('td').each(function() {
+				var colno = $(this).index();
+
+				if (columnscompleted.indexOf(colno) >= 0) {
+					return;
+				}
+
+				columnscompleted = columnscompleted.concat([colno]);
+
+				if (rtlcolumnindexes.indexOf(colno) >= 0) {
+						$(this).closest('table')
+							.find('tr td:nth-child('+(colno+1)+')')
+							.css('background-color', rtlcolor);
+				}
+				if (cpncolumnindexes.indexOf(colno) >= 0) {
+						$(this).closest('table')
+							.find('tr td:nth-child('+(colno+1)+')')
+							.css('background-color', cpncolor);
+				}
+			});
+
 			$('#drugs').DataTable();
 		});
+
 </script>
 </HTML>

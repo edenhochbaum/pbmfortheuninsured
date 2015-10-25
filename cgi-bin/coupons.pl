@@ -42,19 +42,4 @@ print Text::Handlebars->new->render_string($hbstemplate, {
 		} @onmeds
 	],
 	totals => PBM::Drugs::get_pharmacy_total_prices_for_drugs(\@onmeds),
-	#[
-		#map {
-		#	my $pharmacyindex = $_;
-		#	my $sum = 0;
-		#	foreach my $medindex (0 .. @onmeds-1) {
-		#		$sum += 1;
-		#		#$sum+= (
-		#		#	values(
-		#		#		%{$couponsdata->{$onmeds[$medindex]}[$pharmacyindex]}
-		#		#	)[0]
-		#		#);
-		#	}
-		#	$sum;
-		#} (0 .. scalar(@$pharmacies-1))
-	#],
 });
