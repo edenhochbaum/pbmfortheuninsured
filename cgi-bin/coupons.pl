@@ -42,4 +42,5 @@ print Text::Handlebars->new->render_string($hbstemplate, {
 		} @onmeds
 	],
 	totals => PBM::Drugs::get_pharmacy_total_prices_for_drugs(\@onmeds),
+	bestpharmacy => PBM::Drugs::get_best_pharmacy_for_drugs(\@onmeds),
 });

@@ -37,26 +37,37 @@
 		</tbody>
 </table>
 
+<div bestpharmacy="{{bestpharmacy}}"></div>
+
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 
 <script>
 		var rtlcolor = 'palegreen';
 		var cpncolor = 'yellow';
+		var bestcolor = 'orange';
 
 		var rtlcolumnindexes = [];
 		var cpncolumnindexes = [];
+		var bestcolumnindexes = [];
 
 		$(document).ready(function() {
-			$('#drugs').find("th[name$='Rtl']").each(function(index, element) {
+			var bestpharmacy = $('div[bestpharmacy]').first().attr('bestpharmacy');
+
+			$('#drugs').find("th[name$='Rtl'][name!='"+bestpharmacy+"']").each(function(index, element) {
 				$(this).css('background-color', rtlcolor);
 				var colno = $(this).index();
 				rtlcolumnindexes = rtlcolumnindexes.concat([$(this).index()]);
 			});
-			$('#drugs').find("th[name$='Cpn']").each(function(index, element) {
+			$('#drugs').find("th[name$='Cpn'][name!='"+bestpharmacy+"']").each(function(index, element) {
 				$(this).css('background-color', cpncolor);
 				var colno = $(this).index();
 				cpncolumnindexes = cpncolumnindexes.concat([$(this).index()]);
+			});
+			$('#drugs').find("th[name='"+bestpharmacy+"']").each(function(index, element) {
+				$(this).css('background-color', 'orange');
+				var colno = $(this).index();
+				bestcolumnindexes = bestcolumnindexes.concat([$(this).index()]);
 			});
 
 			var columnscompleted = [];
@@ -78,6 +89,11 @@
 						$(this).closest('table')
 							.find('tr td:nth-child('+(colno+1)+')')
 							.css('background-color', cpncolor);
+				}
+				if (bestcolumnindexes.indexOf(colno) >= 0) {
+						$(this).closest('table')
+							.find('tr td:nth-child('+(colno+1)+')')
+							.css('background-color', bestcolor);
 				}
 			});
 

@@ -163,4 +163,24 @@ sub _totals_with_dec {
 	return \@newarray;
 }
 
+# pharmacy name
+sub get_best_pharmacy_for_drugs {
+	my ($drugssubset) = @_;
+
+	my $pharmacytotalprices = get_pharmacy_total_prices_for_drugs($drugssubset);
+
+	# get index of the min
+	my $min = 9999999999999;
+	my $mindex = -1;
+
+	foreach my $i (0 .. @$pharmacytotalprices-1) {
+		if ($pharmacytotalprices->[$i] < $min) {
+			$min = $pharmacytotalprices->[$i];
+			$mindex = $i;
+		}
+	}
+
+	return get_pharmacies()->[$mindex];
+}
+
 1;
