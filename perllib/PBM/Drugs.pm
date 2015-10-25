@@ -5,6 +5,15 @@ use warnings;
 
 use Text::CSV;
 
+sub naive_string_inlist {
+	my ($elem, @list) = @_;
+
+	foreach my $l (@list) {
+		return 1 if ($elem eq $l);
+	}
+	return 0;
+}
+
 # returns listref of hashrefs, with each hashref having Drug, Id, and locations
 sub get_all_data {
 	my $csv = Text::CSV->new({ sep_char => ',' });
@@ -34,7 +43,7 @@ sub get_drug_names {
 	return [ map { $_->{Drug} } @$elements ];
 }
 
-sub get_pharmacies {
+sub get_pharmacies { # TODO: canonical order isn't guaranteed
 	my $elements = get_all_data();
 	return [grep { $_ !~ /^Drug$/ and $_ !~ /^Id$/ } keys($elements->[0])]
 }
@@ -84,6 +93,57 @@ sub get_pharmacies_for_drugs {
 	}
 
 	return $rv;
+}
+
+# return listref of prices for the given drug, ordered by pharmacy canonical order
+sub get_ordered_pharmacy_prices_for_drug {
+	my ($drug) = @_;
+
+	my @drugs = @{get_drug_names()};
+
+	unless (naive_string_inlist($drug, @drugs)) {
+		die sprintf('drug [%s] not in list [%s]', $drug, join(', ', @drugs));
+	}
+
+	my $drugmaptoelements = drug_map_to_elements()->{$drug};
+
+	return [values %$drugmaptoelements];
+}
+
+# return listref of summed prices for the given drugs, ordered by pharmacy canonical order
+sub get_pharmacy_total_prices_for_drugs {
+	my ($drugssubset) = @_;
+
+	my @drugssubset = @$drugssubset;
+	my @alldrugs = @{get_drug_names()};
+
+	foreach my $drug (@drugssubset) {
+		unless (naive_string_inlist($drug, @alldrugs)) {
+			die sprintf('drug [%s] not in list [%s]', $drug, join(', ', @alldrugs));
+		}
+	}
+
+	return 1;
+}
+
+# TODO: amateur hour: bad on 0-length arrays, arrays w/o numeric entries, etc.
+sub _array_sum {
+	my ($array1, $array2) = @_;
+
+	my @array1 = @$array1;
+	my @array2 = @$array2;
+
+	unless (@array1 == @array2) {
+		die sprintf('different sizes [%i] vs. [%i] for array1 and array2', scalar(@array1), scalar(@array2));
+	}
+
+	my @sums;
+
+	foreach my $i (0 .. @array1-1) {
+		push(@sums, $array1[$i]+$array2[$i]);
+	}
+
+	return \@sums;
 }
 
 1;
