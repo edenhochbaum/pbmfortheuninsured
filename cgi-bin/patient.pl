@@ -11,6 +11,7 @@ print CGI::header();
 my $query = CGI->new;
 
 my $id = $query->param('id') || 'unknown';
+my $sex = $query->param('sex') || 'unknown';
 
 use Text::Handlebars;
 use File::Slurp;
@@ -27,6 +28,7 @@ my $patientdata = {
 	allergies => 'allergies here',
 	dischargeinstructions => 'discharge instructions here',
 	meds => PBM::Drugs::get_drug_names(),
+	sex => $sex,
 };
 
 print Text::Handlebars->new->render_string($hbstemplate, $patientdata);
