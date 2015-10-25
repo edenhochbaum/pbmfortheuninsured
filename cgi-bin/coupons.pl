@@ -41,7 +41,7 @@ print Text::Handlebars->new->render_string($hbstemplate, {
 			};
 		} @onmeds
 	],
-	totals =>
+	totals => PBM::Drugs::get_pharmacy_total_prices_for_drugs(\@onmeds),
 	#[
 		#map {
 		#	my $pharmacyindex = $_;
