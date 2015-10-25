@@ -4,6 +4,7 @@ $| = 1;
 
 use CGI;
 use PBM::Drugs;
+use PBM::Patients;
 
 print CGI::header();
 
@@ -19,7 +20,7 @@ my $patient_file = sprintf('%s/hbs/patient.hbs', $ENV{DOCUMENT_ROOT});
 my $hbstemplate = File::Slurp::read_file($patient_file);
 
 my $patientdata = {
-	patientname => 'patient name',
+	patientname => PBM::Patients::name($id),
 	patientid => $id,
 	pcp => 'pcp here',
 	hpi => 'hpi here',
