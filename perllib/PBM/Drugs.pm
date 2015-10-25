@@ -149,7 +149,18 @@ sub _array_sum {
 		push(@sums, $array1[$i]+$array2[$i]);
 	}
 
-	return \@sums;
+	return _totals_with_dec(\@sums);
+}
+
+sub _totals_with_dec {
+	my ($array) = @_;
+
+	my @newarray;
+	foreach my $elem (@$array) {
+		push(@newarray, sprintf('%.2f', $elem));
+	}
+
+	return \@newarray;
 }
 
 1;
