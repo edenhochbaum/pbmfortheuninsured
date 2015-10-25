@@ -123,7 +123,13 @@ sub get_pharmacy_total_prices_for_drugs {
 		}
 	}
 
-	return 1;
+	my $totals = [(0) x @{get_pharmacies()}];
+
+	foreach my $drug (@drugssubset) {
+		$totals = _array_sum($totals, get_ordered_pharmacy_prices_for_drug($drug));
+	}
+
+	return $totals;
 }
 
 # TODO: amateur hour: bad on 0-length arrays, arrays w/o numeric entries, etc.
